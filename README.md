@@ -13,14 +13,17 @@
     用c3p0获取数据源，创建连接；  
     释放资源；  
   * c3p0-config.xml(/src/)  
-    修改基本配置信息；  
+    修改基本配置信息； 
+  * web.xml(WEB-INF/lib)  
+    配置servlet到web服务器，配置servlet的类全路径，servlet的名称，servlet的访问路径
  
 * 创建servlet(LoginServlet.java:路径 /login/ 下)选择继承 HttpServlet 
-  * 重写dopost（）
+  * 重写doPost(HttpServletRequest request, HttpServletResponse response)
   * 接受用户名和密码
-  * 调用service层（UserService）完成登录操作
+  * 调用service层（UserService）返回user,完成登录操作
   * 提示信息
 * UserService
   * login(username,password)
   * 调用dao
-* dao:通过用户名和密码查询数据库。
+* dao: 
+  * 通过用户名和密码查询数据库。c3p0
