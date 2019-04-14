@@ -9,9 +9,14 @@
 * 导入jar包:mysql驱动 / dbutils / c3p0   
   * 将jar包放到WebInf/lib/ 下，会自动导包在web app libraries  
 * 导入工具类和配置文件  
-  * datasourceUtils  
-  * c3p0-config.xml  
-* 创建servlet(LoginServlet:路径 /login/ 下)
+  * datasourceUtils.java(src/xxx包/)：工具类集合了以下方法：  
+    用c3p0获取数据源，创建连接；  
+    释放资源；  
+  * c3p0-config.xml(/src/)  
+    修改基本配置信息；  
+ 
+* 创建servlet(LoginServlet.java:路径 /login/ 下)选择继承 HttpServlet 
+  * 重写dopost（）
   * 接受用户名和密码
   * 调用service层（UserService）完成登录操作
   * 提示信息
