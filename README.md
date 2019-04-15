@@ -56,7 +56,16 @@
     * String getMimeType(String 文件类型)
 * 获取全局管理者：
   * getServletContext()
- 
+### 域对象：
+* 创建：在服务器启动的时候，服务器会为每一个项目创建一个全局管理者，servletcontext就是当前项目的引用
+* 销毁：在项目被移除或者服务器关闭的时候销毁
+* 常用方法：
+  * xxxAttribute()
+     * setAttribute(String key,Object Value):
+     * Object getAttribute(String key)
+     * removeAttribute(String key)
+### 通过类加载器获取文件的路径（处于classes目录下的文件）
+类.class.getClassLoader().getResource("文件目录").getPath()
 ### 步骤分析：
   * setAttribute(String key,Object value);//设置值
   * Object getAttribute(String key);//获取值 
