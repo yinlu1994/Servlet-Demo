@@ -60,7 +60,7 @@
 ### 步骤分析：
   * setAttribute(String key,Object value);//设置值
   * Object getAttribute(String key);//获取值 
-  * removeAttribute(String key);//移除值
+  * removeAttribute(String key);//移除值  
 复制之前的项目时，要右键->properties->web Project Settings->contect root:新名字
 * 在项目启动的时候，初始化登陆次数
   * 在loginservlet的init无参的方法（继承override）中获取全局管理者，将值初始化为0，放入servletcontext上
