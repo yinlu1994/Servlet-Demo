@@ -110,7 +110,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 	doGet(request, response);
 }
 ```
-* 在web.xml中设置doget()随着服务器的启动而启动
+* 在web.xml中设置LoginServlet.init()初始化操作随着服务器的启动而启动
 ```(xml)
 <servlet>
     <servlet-name>LoginServlet</servlet-name>
