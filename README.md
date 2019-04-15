@@ -41,15 +41,59 @@
 * 获取全局管理者：
   * getServletContext()
 ### 步骤分析：
-#### 方法1：
 复制之前的项目时，要右键->properties->web Project Settings->contect root:新名字
 * 在项目启动的时候，初始化登陆次数
   * 在loginservlet的init无参的方法（继承override）中获取全局管理者，将值初始化为0，放入servletcontext上
+  ```(java)
+  //初始化登录次数
+	@Override
+	public void init() throws ServletException {
+		//获取全局管理者
+		ServletContext context = getServletContext(); 
+		//初始化次数
+		context.setAttribute("count", 0);
+	}
+  ```
 * 登录成功之后，在loginservlet中获取全局管理者，获取登陆成功的总次数，
 * 然后将次数+1，然后将值设置回去，
+```(java)
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 0. 设置编码（显示中文）
+		response.setContentType("text/html;charset=utf-8");
+		// 1.接收用户名和密码
+		String username = request.getParameter("username");//name属性中的string值
+		String password = request.getParameter("password");
+		
+		// 2.调用userservice 里的login(username,password) 返回值：User user
+		User user = null;
+		try {
+			user = new UserService().login(username,password);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// 3.判断user是否为空
+		if(user == null) {
+			// 3.1 若为空，写提示信息
+			response.getWriter().print("用户名和密码不匹配");
+			//案例2：定时跳转
+			response.setHeader("refresh", "3;url=/Servlet_learning/login.htm");
+		}else {
+			// 3.2 若不为空，写提示信息
+			response.getWriter().print(user.getUsername()+":欢迎回来");
+			//4.登录成功之后，获取全局管理者
+			ServletContext context = this.getServletContext();
+			//5.获取总次数
+			Integer cs = (Integer) context.getAttribute("count");
+			//6.将次数+1
+			cs++;
+			//7.将次数赋予一个“count”名，再次放入域对象中
+			context.setAttribute("count", cs);
+		}
+	}
+```
 * 当访问showServlet的时候设置全局管理者，获取登陆成功的总次数，然后在页面上打印出来即可
-#### 方法2：
-* 新建servlet文件，右键->new->other->servlet 选择重写doget()dopost()，取消选择构造器
+* 新建另外一个servlet文件，右键->new->other->servlet 选择重写doget()dopost()，取消选择构造器
 ```(java)
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
   // 0.设置编码
