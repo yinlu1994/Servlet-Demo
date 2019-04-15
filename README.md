@@ -105,6 +105,10 @@ Integer cs = (Integer) context.getAttribute("count");
 //3.在页面上打印总次数
 response.getWriter().print("登陆成功的总次数："+cs);
 }
+
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	doGet(request, response);
+}
 ```
 * 在web.xml中设置doget()随着服务器的启动而启动
 ```(xml)
