@@ -28,4 +28,21 @@
 * dao: 
   * 通过用户名和密码查询数据库。c3p0
 ## 实现在提示用户名不匹配后，3秒之后跳转
-* 
+* response.setHeader("refresh","3,url=/登陆界面")；//三秒后刷新
+## 统计登录成功的总人次
+* 需求：在一个用户登陆成功之后，获取之前登录成功总人次，将次数+1，在访问另一个servlet的时候，显示登陆成功的总人次
+* 注意：他是一个单实例多线程的操作，一个计数器要考虑并发的问题
+* 技术分析：`ServletContext`
+### ServletContext:上下文（全局管理者）
+* 常用的方法：
+  * setAttribute(String key,Object value);//设置值
+  * Object getAttribute(String key);//获取值 
+  * removeAttribute(String key);//移除值
+* 获取全局管理者：
+  * getServletContext()
+### 步骤分析：
+* 在项目启动的时候，初始化登陆次数
+  * 在loginservlet的init方法中获取全局管理者，将值初始化为0，放入servletcontext上
+* 登录成功之后，在loginservlet中获取全局管理者，获取登陆成功的总次数，
+* 然后将次数+1，然后将值设置回去，
+* 当访问showServlet的时候设置全局管理者，获取登陆成功的总次数，然后在页面上打印出来即可
