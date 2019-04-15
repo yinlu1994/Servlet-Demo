@@ -33,14 +33,34 @@
 * 需求：在一个用户登陆成功之后，获取之前登录成功总人次，将次数+1，在访问另一个servlet的时候，显示登陆成功的总人次
 * 注意：他是一个单实例多线程的操作，一个计数器要考虑并发的问题
 * 技术分析：`ServletContext`
-### ServletContext:上下文（全局管理者）
+### （理解）ServletContext:上下文（全局管理者）
+一个项目的引用，代表了当前项目。当项目启动的时候，服务器为每个web项目创建一个servletcontext对象，当项目被移除的时候，或者服务器关闭的时候servletcontext销毁
+* 作用：
+  * 获取全局的初始化参数
+  * 共享资源（xxxAttribute）
+  * 获取文件资源
+  * 其他操作
 * 常用的方法：
+  * (了解）String getInitParameter(String key):通过名称获取指定的参数值
+  * (了解)Enumeration getInitParameterNames():获取所有的参数名称,在根标签下有一个`<context-param>`子标签用来存放初始化参数
+  ```(xml)
+  <context-param>
+    <param-name>encoding</param-name>
+    <param-value>utf-8</param-value>
+  </context-param>
+  ```
+  * xxxAttribute
+  * getRealPath(String path):获取文件部署到tomcat上真是路径（带tomcat路径）返回String
+  * getResourceAsStream(String path):以流的形式返回文件
+  * 获取文件的mime类型 大类型/小类型
+    * String getMimeType(String 文件类型)
+* 获取全局管理者：
+  * getServletContext()
+ 
+### 步骤分析：
   * setAttribute(String key,Object value);//设置值
   * Object getAttribute(String key);//获取值 
   * removeAttribute(String key);//移除值
-* 获取全局管理者：
-  * getServletContext()
-### 步骤分析：
 复制之前的项目时，要右键->properties->web Project Settings->contect root:新名字
 * 在项目启动的时候，初始化登陆次数
   * 在loginservlet的init无参的方法（继承override）中获取全局管理者，将值初始化为0，放入servletcontext上
@@ -118,3 +138,34 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
     <load-on-startup>2</load-on-startup>
   </servlet>
 ```
+### (了解)servletConfig
+* 它是servlet配置对象，是由服务器创建的，在创建servlet的同时也创建了它，通过servlet的init(ServletConfig config)将config对象传递给servlet,由servlet的getServletConfig方法获取
+* 作用：
+    * 获取当前servlet的名称
+    * 获取当前servlet的初始化参数
+    * 获取全局管理者
+* 方法：
+  * String getServletName():获取当前servlet的名称（web.xml配置的servlet-name）
+  ```(java)
+  protected void doGet(xxx){
+      //获取sercletconfig
+      ServletConfig config = this.getServletConfig();
+      //获取当前servlet名称
+      String servletName = config.getServletname();
+      //获取初始化参数(例，获取user名)
+      String user = config.getInitParameter("user");
+      Enumeration<string> names = config.getInitParameterNames();
+      while(names.hasMoreElements()){
+        String name = names.nextElement();
+	}
+      }
+  ```
+  * String getInitParameter(String key):通过名称获取指定的参数值
+  * Enumeration getInitParameterNames():获取所有的参数名称
+    * 注：初始化参数是放在web.xml文件`<servlet>`标签的子标签`<init-param>`
+
+
+
+
+
+	
