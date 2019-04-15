@@ -41,8 +41,32 @@
 * 获取全局管理者：
   * getServletContext()
 ### 步骤分析：
+#### 方法1：
+复制之前的项目时，要右键->properties->web Project Settings->contect root:新名字
 * 在项目启动的时候，初始化登陆次数
-  * 在loginservlet的init方法中获取全局管理者，将值初始化为0，放入servletcontext上
+  * 在loginservlet的init无参的方法（继承override）中获取全局管理者，将值初始化为0，放入servletcontext上
 * 登录成功之后，在loginservlet中获取全局管理者，获取登陆成功的总次数，
 * 然后将次数+1，然后将值设置回去，
 * 当访问showServlet的时候设置全局管理者，获取登陆成功的总次数，然后在页面上打印出来即可
+#### 方法2：
+* 新建servlet文件，右键->new->other->servlet 选择重写doget()dopost()，取消选择构造器
+```(java)
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  // 0.设置编码
+response.setContentType("text/html;charset=utf-8");
+//1.获取全局管理者
+	ServletContext context = this.getServletContext();
+//2.获取登陆的总次数
+Integer cs = (Integer) context.getAttribute("count");
+//3.在页面上打印总次数
+response.getWriter().print("登陆成功的总次数："+cs);
+}
+```
+* 在web.xml中设置doget()随着服务器的启动而启动
+```(xml)
+<servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.servlet.webservlet.LoginServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+```
